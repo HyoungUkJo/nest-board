@@ -14,9 +14,18 @@ import { BoardsService } from './boards.service';
 import { BoardStatus } from './boards-status-enum';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BoardRepository } from './boards.repository';
+import { Board } from './entities/boards.entity';
 
 @Controller('boards')
 export class BoardsController {
+  constructor(private boardsService: BoardsService) {}
+  
+  @Get(':id')
+  getBoardById(@Param('id') id:number): Promise<Board> {
+    return this.boardsService.getBoardById(id);
+  }
   /* constructor(private boardsService: BoardsService) {}
 
   @Get()
