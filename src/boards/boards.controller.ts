@@ -11,13 +11,13 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
-import { Board, BoardStatus } from './boards.model';
+import { BoardStatus } from './boards-status-enum';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
 
 @Controller('boards')
 export class BoardsController {
-  constructor(private boardsService: BoardsService) {}
+  /* constructor(private boardsService: BoardsService) {}
 
   @Get()
   getAllBoards(): Board[] {
@@ -47,5 +47,5 @@ export class BoardsController {
     @Body('status', BoardStatusValidationPipe) status: BoardStatus,
   ): Board {
     return this.boardsService.updateBoardSataus(id, status);
-  }
+  } */
 }
