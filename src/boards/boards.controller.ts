@@ -5,6 +5,7 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
@@ -22,8 +23,13 @@ import { Board } from './entities/boards.entity';
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
+  @Get()
+  getAllBoards():Promise<Board []> {
+    return this.boardsService.getAllBoards();
+  }
+
   @Get(':id')
-  getBoardById(@Param('id') id:number): Promise<Board> {
+  getBoardById(@Param('id') id: number): Promise<Board> {
     return this.boardsService.getBoardById(id);
   }
   @Post()
@@ -31,6 +37,20 @@ export class BoardsController {
   createBoard(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
     return this.boardsService.createBoard(createBoardDto);
   }
+
+  @Delete(':id')
+  deleteBoard(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.boardsService.deletebBoard(id);
+  }
+
+  @Patch(':id/status')
+  updateBoardStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status',BoardStatusValidationPipe) status: BoardStatus,
+  ): Promise<Board> {
+    return this.boardsService.updateBoardStatus(id, status);
+  }
+
   /* constructor(private boardsService: BoardsService) {}
 
   @Get()
