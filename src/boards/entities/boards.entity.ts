@@ -15,7 +15,10 @@ export class Board extends BaseEntity {
 
   @Column()
   status: BoardStatus;
-  
+    /*
+     * ManyToOne : 다대일 관계를 가지고 있음
+     * eager true: user을 조회할때 게시글에 대한 정보까지 가지고 온다.
+    */
   @ManyToOne(type=> User, user=>user.boards, {eager: false})
   user: User
 }
