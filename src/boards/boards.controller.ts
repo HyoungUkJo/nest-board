@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -27,14 +28,16 @@ import { User } from 'src/auth/entities/user.entity';
 @UseGuards(AuthGuard())
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
-
+  private logger = new Logger('BoardsController');
+  
   @Get()
   getAllBoards(): Promise<Board[]> {
     return this.boardsService.getAllBoards();
   }
 
   @Get('user')
-  getUserBoards(@GetUser() user:User): Promise<Board[]> {
+  getUserBoards(@GetUser() user: User): Promise<Board[]> {
+    this.logger.verbose(`User${user.username} trying to get all boards`);
     return this.boardsService.getUserBoards(user);
   }
 
@@ -48,12 +51,17 @@ export class BoardsController {
     @Body() createBoardDto: CreateBoardDto,
     @GetUser() user: User,
   ): Promise<Board> {
+    this.logger.verbose(`User ${user.username} creating a new board.
+      Payload: ${JSON.stringify(createBoardDto)}`)
     return this.boardsService.createBoard(createBoardDto, user);
   }
 
   @Delete(':id')
-  deleteBoard(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.boardsService.deletebBoard(id);
+  deleteBoard(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<void> {
+    return this.boardsService.deletebBoard(id, user);
   }
 
   @Patch(':id/status')

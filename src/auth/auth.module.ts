@@ -6,14 +6,17 @@ import { authProviders } from './auth.providers';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
+import * as config from 'config'; // config 모듈 import 필요
+
+const jwtConfig = config.get('jwt')
 
 @Module({
   imports: [
     PassportModule.register({defaultStrategy: 'jwt'}),
     JwtModule.register({
-      secret:'JWTKey123',
+      secret: process.env.JWT_SECRET || jwtConfig.secret,
       signOptions: {
-        expiresIn: 3600,
+        expiresIn: process.env.JWT_SECRET || jwtConfig.expiresIn,
       }
     }),
     DatabaseModule],
